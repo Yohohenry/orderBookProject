@@ -1,0 +1,156 @@
+.container {
+	background-color: #131b29;
+	color: #f0f4f8;
+	border-radius: 5px;
+	width: 320px;
+	font-size: 18px;
+}
+
+.header {
+	flex: 1;
+	padding: 0 15px;
+	height: 40px;
+	line-height: 40px;
+	text-align: start;
+	font-size: 20px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+	margin-bottom: 5px;
+}
+
+.column-head {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	padding: 0 10px;
+}
+
+.column-head span {
+	flex: 1;
+	text-align: end;
+	color: #8698aa;
+}
+
+.column-head .size {
+	flex: 0.8;
+}
+
+.column-head .total {
+	flex: 1.2;
+}
+
+.ask-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	background-color: #131b29;
+	padding: 5px 10px;
+	color: #ff5b5a;
+	cursor: pointer;
+}
+
+.ask-row:hover {
+	background-color: #1e3059;
+}
+
+.bid-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	padding: 5px 10px;
+	color: #00b15d;
+	cursor: pointer;
+}
+
+.bid-row:hover {
+	background-color: #1e3059;
+}
+
+.ask-price {
+	flex: 1;
+	color: #ff5b5a;
+}
+
+.bid-price {
+	flex: 1;
+	color: #00b15d;
+}
+
+.size {
+	flex: 0.8;
+	text-align: right;
+	color: white;
+}
+
+.total {
+	display: "flex";
+	align-items: flex-end;
+	position: relative;
+	flex: 1.2;
+	text-align: right;
+	color: white;
+	height: 20;
+}
+
+.total-percentage {
+	width: 100%;
+	position: absolute;
+	right: 0;
+	height: 100%;
+}
+
+.total-percentage--red {
+	background-color: rgba(255, 0, 0, 0.12);
+}
+
+.total-percentage--green {
+	background-color: rgba(16, 186, 104, 0.12);
+}
+
+.current-price {
+	display: flex;
+	justify-content: center;
+	padding: 10px 0;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+.price-down {
+	background-color: rgba(255, 90, 90, 0.12);
+}
+
+.price-up {
+	background-color: rgba(16, 186, 104, 0.12);
+}
+
+.flash-size-down {
+	animation: flashRedBackground 0.3s ease-out;
+}
+
+.flash-size-up {
+	animation: flashGreenBackground 0.3s ease-out;
+}
+
+.flash-green-background {
+	animation: flashGreenBackground 0.3s ease-out;
+}
+
+.flash-red-background {
+	animation: flashRedBackground 0.3s ease-out;
+}
+
+@keyframes flashGreenBackground {
+	0% {
+		background-color: rgba(0, 177, 93, 0.5);
+	}
+	100% {
+		background-color: transparent;
+	}
+}
+@keyframes flashRedBackground {
+	0% {
+		background-color: rgba(255, 91, 90, 0.5);
+	}
+	100% {
+		background-color: transparent;
+	}
+}
