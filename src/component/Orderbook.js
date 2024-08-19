@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import useOrderBook from "../hooks/useOrderBook";
 import useLastPrice from "../hooks/useLastPrice";
 import { calculateTotal, formatCurrency } from "../utils/utils";
@@ -14,6 +20,11 @@ const OrderBook = () => {
 	const prevAsks = useRef(null);
 
 	useEffect(() => {
+		prevBids.current = renderBids;
+		prevAsks.current = renderAsks;
+	}, [renderBids, renderAsks]);
+
+	useEffect(() => {
 		setRenderBids(bids.slice(0, 8));
 	}, [bids]);
 
@@ -21,22 +32,24 @@ const OrderBook = () => {
 		setRenderAsks(asks.slice(-8));
 	}, [asks]);
 
-	useEffect(() => {
-		prevBids.current = renderBids;
-		prevAsks.current = renderAsks;
-	}, [renderBids, renderAsks]);
-
-	const colorFilter =
-		side === "down"
+	const colorFilter = useMemo(() => {
+		return side === "down"
 			? { color: "#FF5B5A" }
 			: side === "up"
 			? { color: "#00b15d" }
 			: { color: "#F0F4F8" };
+	}, [side]);
+
+	const arrowDirection = useMemo(() => {
+		return side === "up" ? "price-up" : side === "down" ? "price-down" : "";
+	}, [side]);
 
 	const bidTotals = calculateTotal(bids, true);
 	const askTotals = calculateTotal(asks);
 
-	const renderAskQuotes = () => {
+	const isLoading = bids.length === 0 && asks.length === 0;
+
+	const renderAskQuotes = useCallback(() => {
 		return renderAsks.map((ask, index) => {
 			const totalPercentage =
 				(parseInt(askTotals.at(-8 + index)) / parseInt(askTotals[0])) *
@@ -79,9 +92,9 @@ const OrderBook = () => {
 				</div>
 			);
 		});
-	};
+	}, [askTotals, price, renderAsks]);
 
-	const renderBidQuotes = () => {
+	const renderBidQuotes = useCallback(() => {
 		return renderBids.map((bid, index) => {
 			const totalPercentage =
 				(parseInt(bidTotals[index]) / parseInt(bidTotals[7])) * 100;
@@ -123,12 +136,22 @@ const OrderBook = () => {
 				</div>
 			);
 		});
-	};
+	}, [bidTotals, price, renderBids]);
+
+	if (isLoading) {
+		return (
+			<div className="container loadingContainer">
+				<div>
+					<span>loading...</span>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="container">
 			<div className="header">
-				<span>Order Book</span>
+				<span className="title">Order Book</span>
 			</div>
 			<div className="column-head">
 				<span className="price">Price (USD)</span>
@@ -136,15 +159,7 @@ const OrderBook = () => {
 				<span className="total">Total</span>
 			</div>
 			{renderAskQuotes()}
-			<div
-				className={`current-price ${
-					side === "up"
-						? "price-up"
-						: side === "down"
-						? "price-down"
-						: ""
-				}`}
-			>
+			<div className={`current-price ${arrowDirection}`}>
 				<span style={colorFilter}>{formatCurrency(price)}</span>
 				{side !== "same" && (
 					<IconArrowDown
